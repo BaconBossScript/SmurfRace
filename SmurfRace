@@ -1,0 +1,201 @@
+local OrionLib = loadstring(game:HttpGet(('https://raw.githubusercontent.com/shlexware/Orion/main/source')))()
+local Window = OrionLib:MakeWindow({Name = "BaconBoss Hub | Shailushai Smurf Cat Race Simulator", HidePremium = false, SaveConfig = true, ConfigFolder = "OrionTest"})
+
+
+
+
+local TpTab = Window:MakeTab({
+	Name = "Main",
+	Icon = "rbxassetid://4483345998",
+	PremiumOnly = false
+})
+
+local Tp2Tab = Window:MakeTab({
+	Name = "Egg",
+	Icon = "rbxassetid://4483345998",
+	PremiumOnly = false
+})
+
+local Tp4Tab = Window:MakeTab({
+	Name = "Others",
+	Icon = "rbxassetid://4483345998",
+	PremiumOnly = false
+})
+
+
+_G.farm = true
+function farm()
+     while _G.farm == true do
+        _G.RemoveWhiteScreen = false
+        _G.Redeemallcodes = true 
+        task.spawn(function()
+        if _G.RemoveWhiteScreen then
+        game:GetService("Players").LocalPlayer.PlayerGui.FX.Background.Visible = false
+        end
+        end)
+        task.spawn(function()
+        if _G.Redeemallcodes then
+        for i,v in pairs(game:GetService("ReplicatedStorage").Codes:GetChildren()) do
+        local args = {
+            [1] = game:GetService("ReplicatedStorage"):WaitForChild("Codes"),
+            [2] = v.Name
+        }
+        
+        game:GetService("Players").LocalPlayer.PlayerGui.Main.Menus.ShopMenu.MainBody.ShopBG.ShopScroll.Codes.Template.MainBody.RedeemButton.RedeemScript.Code:FireServer(unpack(args))
+        
+        end
+        end
+        end)
+        for i,v in pairs(workspace.Race:GetChildren()) do
+        task.spawn(function()
+        if v:FindFirstChild("Rewards") then
+        for x,d in pairs(v:FindFirstChild("Rewards"):GetChildren()) do
+        if game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
+        firetouchinterest(d,game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart"),0)
+        task.wait(0.1)
+        firetouchinterest(d,game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart"),1)
+        end
+        end
+        end
+        end)
+        end
+        wait(0)
+    end
+end
+
+TpTab:AddLabel("Note: Spam Turn On And Turn Off For Faster A Lot")
+
+TpTab:AddToggle({
+	Name = "Auto Win",
+	Default = false,
+	Callback = function(Value)
+		_G.farm = Value
+      farm()
+	end    
+})
+ 
+_G.segg = "Basic"
+_G.egg = true
+function egg()
+     while _G.egg == true do
+     game:GetService("ReplicatedStorage"):WaitForChild("RemoteEvents"):WaitForChild("EggOpened"):InvokeServer(_G.segg, "Single", {})
+     wait(0)
+   end
+end
+
+Tp2Tab:AddLabel("Note: Stay Near The Egg")
+
+_G.degg = true
+function degg()
+     while _G.degg == true do
+		local args = {
+			[1] = "Basic",
+			[2] = "Single",
+			[3] = {
+				["Dog"] = true,
+				["Kitty"] = true,
+				["Deer"] = true
+			}
+		}
+		
+		game:GetService("ReplicatedStorage"):WaitForChild("RemoteEvents"):WaitForChild("EggOpened"):InvokeServer(unpack(args))
+		
+    wait(0)
+   end
+end
+
+
+Tp2Tab:AddToggle({
+	Name = "Auto Hatch Cheapest Egg With Auto Delete All",
+	Default = false,
+	Callback = function(Value)
+		_G.degg = Value
+      degg()
+	end    
+})
+
+Tp4Tab:AddButton({
+    Name = "Anti AFK",
+    Callback = function()
+        local vu = game:GetService("VirtualUser")
+        game:GetService("Players").LocalPlayer.Idled:connect(function()
+            vu:Button2Down(Vector2.new(0, 0), workspace.CurrentCamera.CFrame)
+            wait(1)
+            vu:Button2Up(Vector2.new(0, 0), workspace.CurrentCamera.CFrame)
+        end)
+    end
+})
+
+Tp4Tab:AddButton({
+    Name = "Delete Time Hold Button E",
+    Callback = function()
+        while true do
+            for _, v in next, workspace:GetDescendants() do
+                if v:IsA("ProximityPrompt") then
+                    v.HoldDuration = 0
+                end
+            end
+            wait(1) 
+        end
+    end
+})
+
+Tp4Tab:AddButton({
+    Name = "Server Less People",
+    Callback = function()
+        local Http = game:GetService("HttpService")
+        local TPS = game:GetService("TeleportService")
+        local Api = "https://games.roblox.com/v1/games/"
+
+        local _place = game.PlaceId
+        local _servers = Api.._place.."/servers/Public?sortOrder=Asc&limit=100"
+
+        local function ListServers(cursor)
+            local Raw = game:HttpGet(_servers .. ((cursor and "&cursor="..cursor) or ""))
+            return Http:JSONDecode(Raw)
+        end
+
+        local Server, Next
+        repeat
+            local Servers = ListServers(Next)
+            Server = Servers.data[1]
+            Next = Servers.nextPageCursor
+        until Server
+
+        TPS:TeleportToPlaceInstance(_place, Server.id, game.Players.LocalPlayer)
+    end
+})
+
+Tp4Tab:AddButton({
+    Name = "Server Hop",
+    Callback = function()
+        local module = loadstring(game:HttpGet("https://raw.githubusercontent.com/LeoKholYt/roblox/main/lk_serverhop.lua"))()
+        module:Teleport(game.PlaceId)
+    end
+})
+
+Tp4Tab:AddSlider({
+	Name = "Change Speed Power",
+	Min = 16,
+	Max = 1000,
+	Default = 5,
+	Color = Color3.fromRGB(255,255,255),
+	Increment = 1,
+	ValueName = "Speed",
+	Callback = function(Value)
+		game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = Value
+	end    
+})
+
+Tp4Tab:AddSlider({
+	Name = "Change Jump Power",
+	Min = 16,
+	Max = 1000,
+	Default = 5,
+	Color = Color3.fromRGB(255,255,255),
+	Increment = 1,
+	ValueName = "Jump",
+	Callback = function(Value)
+		game.Players.LocalPlayer.Character.Humanoid.JumpPower = Value
+	end    
+})
